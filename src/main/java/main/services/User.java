@@ -1,15 +1,15 @@
-package services;
+package main.services;
 
 public class User {
     private String id;
     private String login;
-    private String passowrd;
+    private String password;
     private String email;
 
-    public User(String id, String login, String passowrd, String email) {
+    public User(String id, String login, String password, String email) {
         this.id = id;
         this.login = login;
-        this.passowrd = passowrd;
+        this.password = password;
         this.email = email;
     }
 
@@ -29,12 +29,12 @@ public class User {
         this.login = login;
     }
 
-    public String getPassowrd() {
-        return passowrd;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassowrd(String passowrd) {
-        this.passowrd = passowrd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {

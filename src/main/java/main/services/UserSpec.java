@@ -1,13 +1,13 @@
-package services;
+package main.services;
 
 public class UserSpec {
     private String login;
-    private String passowrd;
+    private String password;
     private String email;
 
-    public UserSpec(String login, String passowrd, String email) {
+    public UserSpec(String login, String password, String email) {
         this.login = login;
-        this.passowrd = passowrd;
+        this.password = password;
         this.email = email;
     }
 
@@ -15,8 +15,8 @@ public class UserSpec {
         this.login = login;
     }
 
-    public void setPassowrd(String passowrd) {
-        this.passowrd = passowrd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setEmail(String email) {
@@ -27,8 +27,8 @@ public class UserSpec {
         return login;
     }
 
-    public String getPassowrd() {
-        return passowrd;
+    public String getPassword() {
+        return password;
     }
 
     public String getEmail() {
