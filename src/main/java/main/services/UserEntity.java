@@ -21,7 +21,7 @@ public class UserEntity {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
             byte[] bytes = userSpec.getPassword().getBytes();
-            this.password = MessageDigest.getInstance("SHA-512").digest(bytes).toString();
+            this.password = new String(MessageDigest.getInstance("SHA-512").digest(bytes));
         } catch (NoSuchAlgorithmException e) {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
             throw new IllegalStateException("Unable to hash password");

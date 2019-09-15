@@ -10,26 +10,35 @@ public class UserService {
     @Autowired
     private MysqlUserStorage mysqlUserStorage;
 
-    public User createUser(UserSpec userSpec) {
-        UserEntity userEntity = mysqlUserStorage.store(userSpec);
-        return userFrom(userEntity);
+    public Result<User> createUser(UserSpec userSpec) {
+        Result<UserEntity> result = mysqlUserStorage.store(userSpec);
+        User user = userFrom(result.getValue());
+        Result<User> userResult = new Result<>(user, result.getStatusCode(), result.getStatusMessage());
+        return userResult;
     }
 
-    public Boolean deleteUser(String id) {
+    public Result<Boolean> deleteUser(String id) {
         return mysqlUserStorage.delete(id);
     }
 
-    public User getUser(String id) {
-        UserEntity userEntity = mysqlUserStorage.get(id);
-        return userFrom(userEntity);
+    public Result<User> getUser(String id) {
+        Result<UserEntity> result = mysqlUserStorage.get(id);
+        User user = userFrom(result.getValue());
+        Result<User> userResult = new Result<>(user, result.getStatusCode(), result.getStatusMessage());
+        return userResult;
     }
 
-    public User updateUser(String id, UserSpec userSpec) {
-        UserEntity userEntity = mysqlUserStorage.update(id, userSpec);
-        return userFrom(userEntity);
+    public Result<User> updateUser(String id, UserSpec userSpec) {
+        Result<UserEntity> result = mysqlUserStorage.update(id, userSpec);
+        User user = userFrom(result.getValue());
+        Result<User> userResult = new Result<>(user, result.getStatusCode(), result.getStatusMessage());
+        return userResult;
     }
 
     private User userFrom(UserEntity userEntity) {
+        if (userEntity == null) {
+            return null;
+        }
         return new User(userEntity.getId(), userEntity.getLogin(), userEntity.getPassword(), userEntity.getEmail());
     }
 }

@@ -2,6 +2,7 @@ package main.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import main.services.*;
 
@@ -11,26 +12,30 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(value = "/users")
-    @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody UserSpec userSpec) {
-        return userService.createUser(userSpec);
+    public ResponseEntity<Result<User>> createUser(@RequestBody UserSpec userSpec) {
+        Result<User> result = userService.createUser(userSpec);
+        HttpStatus status = HttpStatus.resolve(result.getStatusCode().getCode());
+        return new ResponseEntity<>(result, status);
     }
 
     @DeleteMapping(value = "/users/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Boolean deleteUser(@PathVariable String id) {
-        return userService.deleteUser(id);
+    public ResponseEntity<Result<Boolean>> deleteUser(@PathVariable String id) {
+        Result<Boolean> result = userService.deleteUser(id);
+        HttpStatus status = HttpStatus.resolve(result.getStatusCode().getCode());
+        return new ResponseEntity<>(result, status);
     }
 
     @GetMapping(value = "/users/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public User getUser(@PathVariable String id) {
-        return userService.getUser(id);
+    public ResponseEntity<Result<User>> getUser(@PathVariable String id) {
+        Result<User> result = userService.getUser(id);
+        HttpStatus status = HttpStatus.resolve(result.getStatusCode().getCode());
+        return new ResponseEntity<>(result, status);
     }
 
     @PatchMapping(value = "/users/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public User updateUser(@PathVariable String id, @RequestBody UserSpec userSpec) {
-        return userService.updateUser(id, userSpec);
+    public ResponseEntity<Result<User>> updateUser(@PathVariable String id, @RequestBody UserSpec userSpec) {
+        Result<User> result = userService.updateUser(id, userSpec);
+        HttpStatus status = HttpStatus.resolve(result.getStatusCode().getCode());
+        return new ResponseEntity<>(result, status);
     }
 }
