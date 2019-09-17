@@ -13,7 +13,38 @@ public class UserController {
 
     @PostMapping(value = "/users")
     public ResponseEntity<Result<User>> createUser(@RequestBody UserSpec userSpec) {
-        Result<User> result = userService.createUser(userSpec);
+        Result<User> result;
+        ValidationResult validationResult = userSpec.validate();
+
+        if (!validationResult.isEmpty()) {
+            StringBuilder messageBuilder = new StringBuilder();
+            for (String message: validationResult.getMessages()) {
+                messageBuilder.append(message).append("\n");
+            }
+            result = new Result<>(null, StatusCodes.INVALID_SPEC, messageBuilder.toString());
+        } else {
+            result = userService.createUser(userSpec);
+        }
+
+        HttpStatus status = HttpStatus.resolve(result.getStatusCode().getCode());
+        return new ResponseEntity<>(result, status);
+    }
+
+    @PatchMapping(value = "/users/{id}")
+    public ResponseEntity<Result<User>> updateUser(@PathVariable String id, @RequestBody UserSpec userSpec) {
+        Result<User> result;
+        ValidationResult validationResult = userSpec.validate();
+
+        if (!validationResult.isEmpty()) {
+            StringBuilder messageBuilder = new StringBuilder();
+            for (String message: validationResult.getMessages()) {
+                messageBuilder.append(message).append("\n");
+            }
+            result = new Result<>(null, StatusCodes.INVALID_SPEC, messageBuilder.toString());
+        } else {
+            result = userService.updateUser(id, userSpec);
+        }
+
         HttpStatus status = HttpStatus.resolve(result.getStatusCode().getCode());
         return new ResponseEntity<>(result, status);
     }
@@ -28,13 +59,6 @@ public class UserController {
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<Result<User>> getUser(@PathVariable String id) {
         Result<User> result = userService.getUser(id);
-        HttpStatus status = HttpStatus.resolve(result.getStatusCode().getCode());
-        return new ResponseEntity<>(result, status);
-    }
-
-    @PatchMapping(value = "/users/{id}")
-    public ResponseEntity<Result<User>> updateUser(@PathVariable String id, @RequestBody UserSpec userSpec) {
-        Result<User> result = userService.updateUser(id, userSpec);
         HttpStatus status = HttpStatus.resolve(result.getStatusCode().getCode());
         return new ResponseEntity<>(result, status);
     }

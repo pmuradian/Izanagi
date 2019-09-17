@@ -6,6 +6,7 @@ public enum StatusCodes {
     ENTITY_NOT_FOUND(404),
     LOGIN_BUSY(422),
     USER_EXISTS(422),
+    INVALID_SPEC(422),
 
     SQL_ERROR(500);
 
