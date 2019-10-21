@@ -9,27 +9,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
-public class MysqlUserStorage {
-    final private static Logger logger = Logger.getLogger(MysqlUserStorage.class.getName());
-
-    private Connection getConnection() {
-        Connection connection = null;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb", "root", "");
-        } catch (ClassNotFoundException | SQLException ex) {
-            logger.log(Level.SEVERE, "Unable to obtain a connection", ex);
-        }
-
-        return connection;
-    }
+public class MysqlUserStorage extends MysqlStorage {
 
     public Result<UserEntity> store(UserSpec userSpec) {
         Result<UserEntity> result = null;
 
         try (Connection connection = getConnection()) {
-            UserEntity userEntity = null;
             String queryString = "insert into users values(?, ?, ?, ?);";
             PreparedStatement insertStatement = connection.prepareStatement(queryString);
             String id = UUID.randomUUID().toString();
