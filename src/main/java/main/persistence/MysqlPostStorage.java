@@ -25,8 +25,8 @@ public class MysqlPostStorage extends MysqlStorage {
 
             PostEntity postToInsert = new PostEntity(id, postSpec);
             insertStatement.setString(1, postToInsert.getId());
-            insertStatement.setString(3, postToInsert.getUserID());
-            insertStatement.setString(2, postToInsert.getContent());
+            insertStatement.setString(2, postToInsert.getUserID());
+            insertStatement.setString(3, postToInsert.getContent());
             insertStatement.setString(4, postToInsert.getCreationDate());
             int isInserted = insertStatement.executeUpdate();
 
