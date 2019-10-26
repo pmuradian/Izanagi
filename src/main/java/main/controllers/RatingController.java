@@ -1,11 +1,8 @@
 package main.controllers;
 
-import com.sun.org.apache.xerces.internal.dom.RangeImpl;
-import main.models.Post;
 import main.models.Rating;
 import main.models.Result;
 import main.services.RatingService;
-import main.specs.PostSpec;
 import main.specs.RatingSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

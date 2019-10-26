@@ -3,7 +3,6 @@ package main.services;
 import main.entities.RatingEntity;
 import main.models.Rating;
 import main.models.Result;
-import main.persistence.MysqlPostStorage;
 import main.persistence.MysqlRatingStorage;
 import main.specs.RatingSpec;
 import org.springframework.beans.factory.annotation.Autowired;
