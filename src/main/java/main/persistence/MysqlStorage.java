@@ -1,9 +1,12 @@
 package main.persistence;
 
+import org.springframework.stereotype.Service;
+
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Service
 public class MysqlStorage {
 
     final protected static Logger logger = Logger.getLogger(MysqlUserStorage.class.getName());

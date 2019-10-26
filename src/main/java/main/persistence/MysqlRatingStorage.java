@@ -5,11 +5,13 @@ import main.models.Result;
 import main.services.StatusCodes;
 import main.specs.RatingSpec;
 import main.specs.RatingType;
+import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.UUID;
 import java.util.logging.Level;
 
+@Service
 public class MysqlRatingStorage extends MysqlStorage {
     final static private String tableName = "ratings";
 
