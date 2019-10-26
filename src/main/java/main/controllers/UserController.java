@@ -1,5 +1,8 @@
 package main.controllers;
 
+import main.models.Result;
+import main.models.User;
+import main.specs.UserSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,7 @@
-package main.services;
+package main.specs;
 
+import main.services.Validatable;
+import main.services.ValidationResult;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class UserSpec implements Validatable {

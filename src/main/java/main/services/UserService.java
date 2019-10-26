@@ -1,6 +1,10 @@
 package main.services;
 
+import main.entities.UserEntity;
+import main.models.Result;
+import main.models.User;
 import main.persistence.MysqlUserStorage;
+import main.specs.UserSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

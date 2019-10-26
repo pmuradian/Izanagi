@@ -1,6 +1,6 @@
-package main.services;
+package main.entities;
 
-import org.springframework.lang.UsesSunMisc;
+import main.specs.UserSpec;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -31,10 +31,6 @@ public class UserEntity {
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getLogin() {

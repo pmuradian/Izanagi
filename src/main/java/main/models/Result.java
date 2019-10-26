@@ -1,4 +1,6 @@
-package main.services;
+package main.models;
+
+import main.services.StatusCodes;
 
 public class Result<T> {
     private T value;

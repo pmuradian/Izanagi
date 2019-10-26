@@ -1,4 +1,4 @@
-package main.services;
+package main.models;
 
 public class Post {
 

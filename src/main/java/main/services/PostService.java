@@ -1,6 +1,10 @@
 package main.services;
 
+import main.entities.PostEntity;
+import main.models.Post;
+import main.models.Result;
 import main.persistence.MysqlPostStorage;
+import main.specs.PostSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

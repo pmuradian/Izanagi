@@ -1,42 +1,40 @@
 package main.persistence;
 
-import main.entities.PostEntity;
+import main.entities.RatingEntity;
 import main.models.Result;
-import main.services.*;
-import main.specs.PostSpec;
-import org.springframework.stereotype.Service;
+import main.services.StatusCodes;
+import main.specs.RatingSpec;
+import main.specs.RatingType;
 
 import java.sql.*;
 import java.util.UUID;
 import java.util.logging.Level;
 
-@Service
-public class MysqlPostStorage extends MysqlStorage {
-
-    final static private String tableName = "posts";
+public class MysqlRatingStorage extends MysqlStorage {
+    final static private String tableName = "ratings";
 
     final static private String insertQuery = "insert into " + tableName + " values(?, ?, ?, ?)";
-    public Result<PostEntity> store(PostSpec postSpec) {
-        Result<PostEntity> result = null;
+    public Result<RatingEntity> store(RatingSpec ratingSpec) {
+        Result<RatingEntity> result = null;
 
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
             String id = UUID.randomUUID().toString();
 
-            PostEntity postToInsert = new PostEntity(id, postSpec);
-            insertStatement.setString(1, postToInsert.getId());
-            insertStatement.setString(3, postToInsert.getUserID());
-            insertStatement.setString(2, postToInsert.getContent());
-            insertStatement.setString(4, postToInsert.getCreationDate());
+            RatingEntity ratingToInsert = new RatingEntity(id, ratingSpec);
+            insertStatement.setString(1, ratingToInsert.getId());
+            insertStatement.setString(3, ratingToInsert.getPostID());
+            insertStatement.setString(2, ratingToInsert.getUserID());
+            insertStatement.setInt(4, ratingToInsert.getType().rawValue);
             int isInserted = insertStatement.executeUpdate();
 
             if (isInserted > 0) {
-                result = new Result<>(postToInsert, StatusCodes.OK, "");
+                result = new Result<>(ratingToInsert, StatusCodes.OK, "");
             } else {
-                result = new Result<>(null, StatusCodes.SQL_ERROR, "Unable to create post");
+                result = new Result<>(null, StatusCodes.SQL_ERROR, "Unable to create rating");
             }
         } catch (SQLIntegrityConstraintViolationException e) {
-            result = new Result<>(null, StatusCodes.INVALID_SPEC, "Invalid post data");
+            result = new Result<>(null, StatusCodes.INVALID_SPEC, "Invalid rating data");
         } catch (SQLException e) {
             result = new Result<>(null, StatusCodes.SQL_ERROR, "");
         }
@@ -44,8 +42,8 @@ public class MysqlPostStorage extends MysqlStorage {
     }
 
     final static private String getQuery = "select * from " + tableName +" where id = ?;";
-    public Result<PostEntity> get(String id) {
-        Result<PostEntity> result = null;
+    public Result<RatingEntity> get(String id) {
+        Result<RatingEntity> result = null;
 
         try (Connection connection = getConnection()) {
             PreparedStatement selectStatement = connection.prepareStatement(getQuery);
@@ -53,11 +51,12 @@ public class MysqlPostStorage extends MysqlStorage {
             ResultSet resultSet = selectStatement.executeQuery();
 
             if (resultSet.next()) {
-                PostSpec postSpec = new PostSpec(resultSet.getString(1),
-                        resultSet.getString(3));
+                RatingSpec ratingSpec = new RatingSpec(resultSet.getString(2),
+                                                        resultSet.getString(3),
+                                                        RatingType.fromValue(resultSet.getInt(4)));
 
-                PostEntity postEntity = new PostEntity( id, postSpec);
-                result = new Result<>(postEntity, StatusCodes.OK, "");
+                RatingEntity ratingEntity = new RatingEntity(id, ratingSpec);
+                result = new Result<>(ratingEntity, StatusCodes.OK, "");
             }
         } catch (SQLException e) {
             result = new Result<>(null, StatusCodes.SQL_ERROR, "");
@@ -66,6 +65,7 @@ public class MysqlPostStorage extends MysqlStorage {
         return result;
     }
 
+    // TODO: not needed, remove later
     final static private String deleteQuery = "delete from " + tableName + " where id = ?;";
     public Result<Boolean> delete(String id) {
         Result<Boolean> result;
@@ -78,7 +78,7 @@ public class MysqlPostStorage extends MysqlStorage {
             if (updateResult > 0) {
                 result = new Result<>(true, StatusCodes.OK, "");
             } else {
-                result = new Result<>(false, StatusCodes.ENTITY_NOT_FOUND, "post does not exist");
+                result = new Result<>(false, StatusCodes.ENTITY_NOT_FOUND, "rating does not exist");
             }
         } catch (SQLException e) {
             result = new Result<>(false, StatusCodes.SQL_ERROR, "");
@@ -86,21 +86,21 @@ public class MysqlPostStorage extends MysqlStorage {
         return result;
     }
 
-    final static private String updateQuery = "update " + tableName + " set content = ? where id = ?;";
-    public Result<PostEntity> update(String id, PostSpec postSpec) {
-        Result<PostEntity> result;
+    final static private String updateQuery = "update " + tableName + " set type = ? where id = ?;";
+    public Result<RatingEntity> update(String id, RatingSpec ratingSpec) {
+        Result<RatingEntity> result;
         try (Connection connection = getConnection()) {
             PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
 
-            PostEntity postToUpdate = new PostEntity(id, postSpec);
+            RatingEntity ratingEntity = new RatingEntity(id, ratingSpec);
             updateStatement.setString(1, id);
-            updateStatement.setString(2, postToUpdate.getContent());
+            updateStatement.setInt(2, ratingEntity.getType().rawValue);
 
             int isUpdated = updateStatement.executeUpdate();
             if (isUpdated > 0) {
-                result = new Result<>(postToUpdate, StatusCodes.OK, "");
+                result = new Result<>(ratingEntity, StatusCodes.OK, "");
             } else {
-                result = new Result<>(null, StatusCodes.ENTITY_NOT_FOUND, "Post does not exist");
+                result = new Result<>(null, StatusCodes.ENTITY_NOT_FOUND, "Rating does not exist");
             }
         } catch (SQLException e) {
             result = new Result<>(null, StatusCodes.SQL_ERROR, "");

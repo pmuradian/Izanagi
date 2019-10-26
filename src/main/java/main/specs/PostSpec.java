@@ -1,4 +1,4 @@
-package main.services;
+package main.specs;
 
 public class PostSpec {
 

@@ -1,12 +1,14 @@
 package main.persistence;
 
+import main.entities.UserEntity;
+import main.models.Result;
 import main.services.*;
+import main.specs.UserSpec;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Service
 public class MysqlUserStorage extends MysqlStorage {

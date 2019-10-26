@@ -1,4 +1,6 @@
-package main.services;
+package main.entities;
+
+import main.specs.PostSpec;
 
 import java.util.Date;
 
@@ -22,10 +24,6 @@ public class PostEntity {
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getUserID() {
