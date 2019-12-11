@@ -1,6 +1,7 @@
 package main.persistence;
 
-import main.utils.Range;
+import main.commons.Range;
+import main.models.Feed;
 import main.models.Post;
 import main.models.Result;
 import main.services.StatusCodes;
@@ -17,14 +18,23 @@ import java.util.logging.Level;
 @Service
 public class MysqlFeedFetcher extends MysqlStorage {
 
-    public Result<List<Post>> getPosts(Range range) {
-        List<Post> resultList = new ArrayList<>();
-        Result<List<Post>> result;
+    public Result<Feed> fetchFeed(String id) {
+        return null;
+    }
+
+    public Boolean createFeed(String id) {
+        // create new table to store feed
+        return true;
+    }
+
+    public Result<Feed> getPosts(Range range, String feedID) {
+        Result<Feed> result;
         try (Connection connection = getConnection()) {
-            String query = "select * from posts order by creationDate offset " + range.getOffset() + " limit " + range.getCount();
+            String tableName = "posts_".concat(feedID);
+            String query = "select * from " + tableName + " order by creationDate offset " + range.getOffset() + " limit " + range.getCount();
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultset = statement.executeQuery();
-
+            List<Post> resultList = new ArrayList<>();
             while (resultset.next()) {
                 Post post = new Post(resultset.getString(1),
                                      resultset.getString(2),
@@ -32,7 +42,8 @@ public class MysqlFeedFetcher extends MysqlStorage {
                                      resultset.getString(4));
                 resultList.add(post);
             }
-            result = new Result<>(resultList, StatusCodes.OK, "");
+            Feed feed = new Feed(resultList);
+            result = new Result<>(feed, StatusCodes.OK, "");
         } catch (SQLException e) {
             result = new Result<>(null, StatusCodes.SQL_ERROR, "");
             logger.log(Level.SEVERE, e.getLocalizedMessage());

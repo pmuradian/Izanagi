@@ -7,6 +7,7 @@ import main.specs.UserSpec;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -115,4 +116,24 @@ public class MysqlUserStorage extends MysqlStorage {
         }
         return result;
     }
+
+//    public Result<List<UserEntity>> getFollowings(String userID) {
+//        Result<UserEntity> result;
+//        try (Connection connection = getConnection()) {
+//            String queryString = "select user from users where id = ?;";
+//            PreparedStatement updateStatement = connection.prepareStatement(queryString);
+//
+//            updateStatement.setString(1, userID);
+//
+//            int isUpdated = updateStatement.executeUpdate();
+//            if (isUpdated > 0) {
+//                result = new Result<>(userToUpdate, StatusCodes.OK, "");
+//            } else {
+//                result = new Result<>(null, StatusCodes.ENTITY_NOT_FOUND, "User does not exist");
+//            }
+//        } catch (SQLException e) {
+//            result = new Result<>(null, StatusCodes.SQL_ERROR, "");
+//        }
+//        return result;
+//    }
 }

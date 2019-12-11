@@ -65,6 +65,4 @@ public class UserController {
         HttpStatus status = HttpStatus.resolve(result.getStatusCode().getCode());
         return new ResponseEntity<>(result, status);
     }
-
-
 }

@@ -1,4 +1,4 @@
-package main.utils;
+package main.commons;
 
 public class Range {
     private Integer offset = 0;

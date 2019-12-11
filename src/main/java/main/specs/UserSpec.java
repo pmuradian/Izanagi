@@ -41,9 +41,9 @@ public class UserSpec implements Validatable {
     }
 
     public ValidationResult validate() {
-        isValidEmail(this.email);
-        isValidPassword(this.password);
-        isValidLogin(this.login);
+//        isValidEmail(this.email);
+//        isValidPassword(this.password);
+//        isValidLogin(this.login);
 
         return validationResult;
     }
@@ -69,13 +69,13 @@ public class UserSpec implements Validatable {
         if (!password.matches("[_\\-?!@#$%^&*+]+")) {
             validationResult.put(field, "password must contain at least one special character (_-?!@#$%^&*+)");
         }
-        if (!password.matches("[0-9]+")) {
+        if (!(password.matches("[0-9]+"))) {
             validationResult.put(field, "password must contain at least one number");
         }
-        if (!password.matches("[A-Z]+")) {
+        if (!(password.matches("[A-Z]+"))) {
             validationResult.put(field, "password must contain at least one uppercase letter");
         }
-        if (!password.matches("[a-z]+")) {
+        if (!(password.matches("[a-z]+"))) {
             validationResult.put(field, "password must contain at least one lowercase letter");
         }
     }
