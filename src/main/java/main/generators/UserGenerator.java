@@ -14,7 +14,7 @@ import java.util.List;
 public class UserGenerator {
 
     public static void main(String[] args) {
-        generateUsers(3);
+        generateUsers(1000);
     }
 
     private static List<User> generateUsers(Integer count) {
@@ -24,21 +24,21 @@ public class UserGenerator {
             String json = jsonFromUser(user);
             try {
                 Requester.sendRequest(json);
-                users.add(nextUser());
+                users.add(user);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
 
         return users;
     }
 
-    private static Integer userCounter = 0;
+    private static int userCounter = 0;
     private static User nextUser() {
         String id = "id";
-        String login = "rick_" + userCounter.toString();
-        String password = "password" + userCounter.toString();
-        String email = "rickSanchez" + userCounter.toString() + "@citadel.mul";
+        String login = "rick_" + userCounter;
+        String password = "password" + userCounter;
+        String email = "rickSanchez" + userCounter + "@citadel.mul";
         User user = new User(id, login, password, email);
         userCounter++;
         return user;
