@@ -14,7 +14,17 @@ import java.util.List;
 public class UserGenerator {
 
     public static void main(String[] args) {
-        generateUsers(1000);
+        Integer count = 1000;
+//        generateUsers(count);
+        localGenerateUsers(count);
+    }
+
+    private static ArrayList users = new ArrayList<User>();
+
+    private static void localGenerateUsers(Integer count) {
+        while (count-- > 0) {
+            users.add(nextUser());
+        }
     }
 
     private static List<User> generateUsers(Integer count) {
@@ -88,3 +98,4 @@ class Requester {
         }
     }
 }
+
