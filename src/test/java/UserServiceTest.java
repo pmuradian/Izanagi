@@ -34,6 +34,7 @@ public class UserServiceTest {
         if (result.getStatusCode() != StatusCodes.OK || user == null) {
             throw new IllegalStateException(result.getStatusMessage());
         }
+        userID = user.getId();
     }
 
     @AfterAll

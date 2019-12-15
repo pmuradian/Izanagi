@@ -6,6 +6,8 @@ import main.services.*;
 import main.specs.UserSpec;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.List;
 import java.util.UUID;
@@ -62,6 +64,43 @@ public class MysqlUserStorage extends MysqlStorage {
                 UserSpec userSpec = new UserSpec(resultSet.getString(2),
                                                  resultSet.getString(3),
                                                  resultSet.getString(4));
+
+                UserEntity userEntity = new UserEntity( id, userSpec);
+                result = new Result<>(userEntity, StatusCodes.OK, "");
+            } else {
+                result = new Result<>(null, StatusCodes.ENTITY_NOT_FOUND, "");
+            }
+        } catch (SQLException e) {
+            result = new Result<>(null, StatusCodes.SQL_ERROR, "");
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        return result;
+    }
+
+    public Result<UserEntity> get(String login, String password) {
+        Result<UserEntity> result = null;
+        String hashedPassword = password;
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            byte[] bytes = password.getBytes();
+            hashedPassword = new String(MessageDigest.getInstance("SHA-512").digest(bytes));
+        } catch (NoSuchAlgorithmException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+            throw new IllegalStateException("Unable to hash password");
+        }
+
+        try (Connection connection = getConnection()) {
+            String queryString = "select * from users where login = ? and password = ?;";
+            PreparedStatement selectStatement = connection.prepareStatement(queryString);
+            selectStatement.setString(1, login);
+            selectStatement.setString(2, hashedPassword);
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            if (resultSet.next()) {
+                UserSpec userSpec = new UserSpec(resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4));
+                String id = resultSet.getString(1);
 
                 UserEntity userEntity = new UserEntity( id, userSpec);
                 result = new Result<>(userEntity, StatusCodes.OK, "");

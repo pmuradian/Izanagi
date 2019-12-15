@@ -41,9 +41,9 @@ public class UserSpec implements Validatable {
     }
 
     public ValidationResult validate() {
-//        isValidEmail(this.email);
-//        isValidPassword(this.password);
-//        isValidLogin(this.login);
+        isValidEmail(this.email);
+        isValidPassword(this.password);
+        isValidLogin(this.login);
 
         return validationResult;
     }

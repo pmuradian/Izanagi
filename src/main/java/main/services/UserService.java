@@ -45,4 +45,11 @@ public class UserService {
         }
         return new User(userEntity.getId(), userEntity.getLogin(), userEntity.getPassword(), userEntity.getEmail());
     }
+
+    public Result<User> getUserByCredentials(String login, String password) {
+        Result<UserEntity> result = mysqlUserStorage.get(login, password);
+        User user = userFrom(result.getValue());
+        Result<User> userResult = new Result<>(user, result.getStatusCode(), result.getStatusMessage());
+        return userResult;
+    }
 }
