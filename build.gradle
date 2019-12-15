@@ -30,9 +30,19 @@ targetCompatibility = 1.8
 
 dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.17'
-    compile "org.springframework.boot:spring-boot-starter-web"
+    compile 'org.springframework.boot:spring-boot-starter-web'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
 
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'junit', module: 'junit'
+    }
+    testCompile 'org.junit.jupiter:junit-jupiter:5.5.2'
+}
 
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
