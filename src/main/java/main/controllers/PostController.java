@@ -2,12 +2,12 @@ package main.controllers;
 
 import main.models.Post;
 import main.models.Result;
+import main.services.PostService;
 import main.specs.PostSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import main.services.*;
 
 @RestController("")
 public class PostController {

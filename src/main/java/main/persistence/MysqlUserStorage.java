@@ -2,14 +2,13 @@ package main.persistence;
 
 import main.entities.UserEntity;
 import main.models.Result;
-import main.services.*;
+import main.services.StatusCodes;
 import main.specs.UserSpec;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 

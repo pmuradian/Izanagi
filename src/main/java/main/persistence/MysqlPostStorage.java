@@ -2,7 +2,7 @@ package main.persistence;
 
 import main.entities.PostEntity;
 import main.models.Result;
-import main.services.*;
+import main.services.StatusCodes;
 import main.specs.PostSpec;
 import org.springframework.stereotype.Service;
 

@@ -1,33 +1,27 @@
-
 import main.entities.UserEntity;
 import main.models.Result;
-import main.models.User;
-import main.persistence.MysqlStorage;
 import main.persistence.MysqlUserStorage;
-import main.services.UserService;
 import main.services.StatusCodes;
 import main.specs.UserSpec;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.swing.text.html.parser.Entity;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {UserService.class, MysqlUserStorage.class})
+@SpringBootTest(classes = {MysqlUserStorage.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MysqlUserStorageTest {
     @Autowired
     private MysqlUserStorage storage;
 
-    private static String userLogin = "rick1";
-    private static String userPassword = "password1";
-    private static String userEmail = "rick1@citadel.mul";
     private static String userID;
     private static String userIDToBeDeleted;
     private static String wrongUserID = "wrong$$$$user***id;";
@@ -80,7 +74,7 @@ public class MysqlUserStorageTest {
 
     @Test
     public void shouldReturnStatusCodeOKAndTrue_whenUserToBeDeletedExists() {
-        Result<Boolean> result = storage.delete(userID);
+        Result<Boolean> result = storage.delete(userIDToBeDeleted);
         assertEquals(StatusCodes.OK, result.getStatusCode());
         assertTrue(result.getValue());
     }

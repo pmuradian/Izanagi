@@ -3,18 +3,13 @@ package main.services;
 import main.commons.Range;
 import main.entities.UserEntity;
 import main.models.Feed;
-import main.models.Post;
 import main.models.Result;
-import main.models.User;
 import main.persistence.MysqlFeedFetcher;
 import main.persistence.MysqlUserStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Null;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
