@@ -13,6 +13,10 @@ public class Result<T> {
         this.statusMessage = statusMessage;
     }
 
+    public Result(T value, StatusCodes statusCode) {
+        this(value, statusCode, null);
+    }
+
     public StatusCodes getStatusCode() {
         return statusCode;
     }
@@ -23,5 +27,13 @@ public class Result<T> {
 
     public T getValue() {
         return value;
+    }
+
+    public Boolean isValid() {
+        return statusCode != null;
+    }
+
+    public static <U> Result<U> ofType(U type) {
+        return new Result<>(null, null, null);
     }
 }

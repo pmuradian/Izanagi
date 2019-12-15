@@ -8,7 +8,8 @@ public enum StatusCodes {
     USER_EXISTS(422),
     INVALID_SPEC(422),
 
-    SQL_ERROR(500);
+    SQL_ERROR(500),
+    INVALID_RESULT(42);
 
     private Integer code;
 
