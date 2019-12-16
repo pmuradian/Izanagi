@@ -84,8 +84,9 @@ public class MysqlUserStorage extends MysqlStorage {
             byte[] bytes = password.getBytes();
             hashedPassword = new String(MessageDigest.getInstance("SHA-512").digest(bytes));
         } catch (NoSuchAlgorithmException e) {
+            result = new Result<>(null, StatusCodes.INVALID_RESULT, "");
             logger.log(Level.SEVERE, e.getLocalizedMessage());
-            throw new IllegalStateException("Unable to hash password");
+            return result;
         }
 
         try (Connection connection = getConnection()) {
@@ -97,12 +98,14 @@ public class MysqlUserStorage extends MysqlStorage {
 
             if (resultSet.next()) {
                 UserSpec userSpec = new UserSpec(resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4));
+                                                 resultSet.getString(3),
+                                                 resultSet.getString(4));
                 String id = resultSet.getString(1);
 
                 UserEntity userEntity = new UserEntity( id, userSpec);
                 result = new Result<>(userEntity, StatusCodes.OK, "");
+            } else {
+                result = new Result<>(null, StatusCodes.ENTITY_NOT_FOUND, "");
             }
         } catch (SQLException e) {
             result = new Result<>(null, StatusCodes.SQL_ERROR, "");
