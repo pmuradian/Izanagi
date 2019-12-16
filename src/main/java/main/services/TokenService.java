@@ -1,5 +1,6 @@
 package main.services;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import main.models.Result;
@@ -9,12 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 
 @Service
 public class TokenService {
     @Autowired
     private UserService userService;
+    private ArrayList<Integer> tokenHashes = new ArrayList<>();
 
     public Result<String> getToken(String login, String password) {
         Result<String> result = Result.ofType("");
@@ -32,16 +35,24 @@ public class TokenService {
         try {
             String jws = Jwts.builder()
                     .setSubject(userResult.getValue().getId())
-                    .setPayload("{\"login\":"+ login  + "}") // TODO: use Gson
+                    .claim("login", login)
                     .setIssuedAt(Date.from(Instant.ofEpochMilli(issueDate)))
                     .setExpiration(Date.from(Instant.ofEpochMilli(expirationDate)))
                     .signWith(key)
                     .compact();
+            tokenHashes.add(jws.hashCode());
             result = new Result<>(jws, StatusCodes.OK);
         } catch (Exception e) {
             result = new Result<>(null, StatusCodes.INVALID_RESULT, e.getMessage());
         }
-
         return result;
+    }
+
+    public void addToken(String token) {
+        tokenHashes.add(token.hashCode());
+    }
+
+    public Boolean exists(String token) {
+        return tokenHashes.contains(token.hashCode());
     }
 }
