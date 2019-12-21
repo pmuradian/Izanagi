@@ -56,4 +56,37 @@ public class JWTPayload {
         payload = null;
         return builtPayload;
    }
+
+   // MARK: Validation
+    public Boolean hasValidIssueDate() {
+        long issuedAt = this.getIssuedAt() * 1000;
+        long currentTimeMillis = System.currentTimeMillis();
+
+        return currentTimeMillis - issuedAt > 0;
+    }
+
+    public Boolean hasValidLogin() {
+        String login = this.getLogin();
+        if (login == null || login.length() > 50 || (!login.matches("[A-Za-z0-9\\-_]*"))) {
+            return false;
+        }
+        return true;
+    }
+
+    public Boolean hasValidExpirationDate() {
+        long issuedAt = this.getExpirationDate() * 1000;
+        long currentTimeMillis = System.currentTimeMillis();
+        int oneHour = 60 * 60 * 1000;
+
+        return currentTimeMillis - issuedAt <= oneHour;
+    }
+
+    public Boolean payloadHasValidSubject() {
+        String subject = this.getSubject();
+
+        if (subject == null) {
+            return false;
+        }
+        return subject.matches("([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8})");
+    }
 }

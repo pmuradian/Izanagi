@@ -1,27 +1,26 @@
 package main.services;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import main.models.JWTPayload;
 import main.models.Result;
 import main.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 
 @Service
 public class TokenService {
     @Autowired
     private UserService userService;
     private ArrayList<Integer> tokenHashes = new ArrayList<>();
+    private static final Key key = Keys.hmacShaKeyFor("this is my secret key this is my secret key this is my secret key".getBytes());
 
     public Result<String> getToken(String login, String password) {
         Result<String> result = Result.ofType("");
-        final Key key = Keys.hmacShaKeyFor("this is my secret key this is my secret key this is my secret key".getBytes());
 
         final Result<User> userResult = userService.getUserByCredentials(login, password);
         if (userResult.getStatusCode() != StatusCodes.OK || userResult.getValue() == null) {
@@ -33,11 +32,14 @@ public class TokenService {
         final long expirationDate = issueDate + oneHour;
 
         try {
-            String jws = Jwts.builder()
+            JWTPayload payload = JWTPayload.cleanInstance()
+                    .setIssuedAt(issueDate / 1000)
+                    .setExpirationDate(expirationDate / 1000)
                     .setSubject(userResult.getValue().getId())
-                    .claim("login", login)
-                    .setIssuedAt(Date.from(Instant.ofEpochMilli(issueDate)))
-                    .setExpiration(Date.from(Instant.ofEpochMilli(expirationDate)))
+                    .setLogin(login);
+
+            String jws = Jwts.builder()
+                    .setPayload(new Gson().toJson(payload))
                     .signWith(key)
                     .compact();
             tokenHashes.add(jws.hashCode());
@@ -54,5 +56,21 @@ public class TokenService {
 
     public Boolean exists(String token) {
         return tokenHashes.contains(token.hashCode());
+    }
+
+    public Boolean payloadHasValidIssueDate(JWTPayload payload) {
+        return payload.hasValidIssueDate();
+    }
+
+    public Boolean payloadHasValidLogin(JWTPayload payload) {
+        return payload.hasValidLogin();
+    }
+
+    public Boolean payloadHasValidExpirationDate(JWTPayload payload) {
+        return payload.hasValidExpirationDate();
+    }
+
+    public Boolean payloadHasValidSubject(JWTPayload payload) {
+        return payload.payloadHasValidSubject();
     }
 }
