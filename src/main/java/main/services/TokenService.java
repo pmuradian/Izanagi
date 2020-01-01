@@ -24,7 +24,7 @@ public class TokenService {
 
         final Result<User> userResult = userService.getUserByCredentials(login, password);
         if (userResult.getStatusCode() != StatusCodes.OK || userResult.getValue() == null) {
-            return new Result<String>(null, result.getStatusCode(), result.getStatusMessage());
+            return new Result<String>(null, userResult.getStatusCode(), userResult.getStatusMessage());
         }
 
         final long issueDate = System.currentTimeMillis();
@@ -48,6 +48,12 @@ public class TokenService {
             result = new Result<>(null, StatusCodes.INVALID_RESULT, e.getMessage());
         }
         return result;
+    }
+
+    public Result<Boolean> deleteToken(String token) {
+        Boolean isRemoved = tokenHashes.remove(new Integer(token.hashCode()));
+        StatusCodes statusCode = isRemoved ? StatusCodes.OK : StatusCodes.ENTITY_NOT_FOUND;
+        return new Result<>(isRemoved, statusCode, null);
     }
 
     public void addToken(String token) {
