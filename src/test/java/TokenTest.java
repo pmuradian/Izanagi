@@ -1,8 +1,7 @@
-import com.google.gson.Gson;
 import main.entities.UserEntity;
+import main.models.JWTPayload;
 import main.models.Result;
 import main.persistence.MysqlUserStorage;
-import main.models.JWTPayload;
 import main.services.StatusCodes;
 import main.services.TokenService;
 import main.services.UserService;
@@ -15,8 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.validation.Payload;
 
 import static org.junit.jupiter.api.Assertions.*;
 

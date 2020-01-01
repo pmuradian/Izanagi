@@ -2,7 +2,6 @@ import main.controllers.TokenController;
 import main.models.Result;
 import main.models.User;
 import main.persistence.MysqlUserStorage;
-import main.services.StatusCodes;
 import main.services.TokenService;
 import main.services.UserService;
 import main.specs.TokenSpec;
